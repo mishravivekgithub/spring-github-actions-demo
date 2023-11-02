@@ -1,19 +1,22 @@
-name: Deploy to Heroku
+name: Deploy to App services
 
 on: push
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy to Heroku
+    name: Deploy to azure App services
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup java
-        uses: actions/setup-java@v1
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Azure Login
+        uses: azure/login@v1
         with:
-          java-version: 8
-      - uses: akhileshns/heroku-deploy@v3.12.12
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Azure Web App Deploy
+        uses: azure/webapps-deploy@v2
         with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_email: ${{secrets.HEROKU_EMAIL}}
-          heroku_app_name: ${{secrets.HEROKU_APP}}
+          app-name: 'applicationthroughgitaction'
+          slot-name: 'development'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./target/*.jar
