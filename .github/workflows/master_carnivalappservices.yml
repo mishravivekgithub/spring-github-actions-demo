@@ -19,8 +19,8 @@ jobs:
       - name: Set up Java version
         uses: actions/setup-java@v4
         with:
-          java-version: 8
-          distribution: 'adopt'
+          java-version: '8'
+          distribution: 'microsoft'
 
       - name: Build with Maven
         run: mvn clean install
@@ -37,22 +37,13 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write #This is required for requesting the JWT
-  
+      
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: java-app
       
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_FF9D723598CE4348AD9D59A3ED12C19F }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_7FEB31CDBFBE440FBF16B3753B734E46 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F04DF97095C64687BD0E6D6ED6697859 }}
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
@@ -60,4 +51,4 @@ jobs:
           app-name: 'carnivalappservices'
           slot-name: 'Production'
           package: '*.jar'
-          
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_99079458198C4D6FA2B645C4DA04340E }}
