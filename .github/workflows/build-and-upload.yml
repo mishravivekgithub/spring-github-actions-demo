@@ -1,6 +1,6 @@
 name: Build and upload binary artifact
 
-on: push
+on: workflow_dispatch
 
 jobs:
   release:
@@ -16,7 +16,7 @@ jobs:
     - name: Build and package project
       run: mvn -f pom.xml package
     - name: Upload Maven build artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: artifact
         path: ./target/spring-github-actions-demo-0.1.jar
