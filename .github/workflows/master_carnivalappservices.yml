@@ -19,8 +19,8 @@ jobs:
       - name: Set up Java version
         uses: actions/setup-java@v4
         with:
-          java-version: '8'
-          distribution: 'microsoft'
+          java-version: 8
+          distribution: 'adopt'
 
       - name: Build with Maven
         run: mvn clean install
